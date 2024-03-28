@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Lora', 'Roboto', 'sans-serif'], // Example font stack
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

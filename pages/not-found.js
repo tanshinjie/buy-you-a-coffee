@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div>
       <Head>
-        <title>Buy you a coffee ☕️</title>
+        <title>Gift a coffee ☕️</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

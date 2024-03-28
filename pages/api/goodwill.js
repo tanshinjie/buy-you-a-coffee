@@ -12,7 +12,6 @@ function generateUID() {
 }
 
 export default async function handler(req, res) {
-  console.log("handler", req.method)
   switch (req.method) {
     case "GET":
       return get(req, res)
@@ -26,8 +25,6 @@ export default async function handler(req, res) {
 export async function getById(id) {
   
   const selectSql = `SELECT * FROM goodwill WHERE ref = '${id}'`;
-
-  console.log(selectSql)
 
   const db = await openDb()
 
@@ -49,12 +46,13 @@ async function get(req, res) {
 
 async function post(req, res) {
   const date = new Date()
-  const insertSql = `INSERT INTO goodwill (name, message, appreciation, ref, code, redeemed, expires_at) VALUES (?,?,?,?,?,?,?)`;
+  const insertSql = `INSERT INTO goodwill (sender_name, receiver_name, message, appreciation, ref, code, redeemed, expires_at) VALUES (?,?,?,?,?,?,?,?)`;
 
   const db = await openDb()
 
   const value = [
-    req.body.name,
+    req.body.sender_name,
+    req.body.receiver_name,
     req.body.message,
     req.body.appreciation,
     generateUID(),

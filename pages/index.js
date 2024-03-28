@@ -6,18 +6,17 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Buy you a coffee ☕️</title>
+        <title>Gift a coffee ☕️</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>Welcome to "Buy you a coffee ☕️"</h1>
-
-        <p>Who do you feel grateful for today?</p>
-
-        <Link href={"/send"}>
-          <Button>Send token of appreciation</Button>
-        </Link>
+       <main className="max-w-80 mx-auto mt-10">
+        <div className="flex flex-col gap-40 ">
+          <p className="text-[#591F0B] my-8 text-center">Who do you feel grateful for today? 😊</p>
+          <Link href={"/send"}>
+            <Button className="w-full rounded-full p-8 bg-[#2D0C05] text-[#E8C5A5]">Buy him/her coffee today!</Button>
+          </Link>
+        </div>
       </main>
     </div>
   );

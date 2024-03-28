@@ -17,6 +17,22 @@ export default function Deposit() {
 
   const [step, setStep] = useState(steps.deposit);
 
+  // useEffect(()=>{
+  //   fetch(`/api/approval-request?ref=${router.query.ref}`, {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((response) => {
+  //       if (response.approved) {
+  //         setStep(steps.deposit_verified);
+  //       }
+  //     });
+  // },[])
+
   const triggerDepositVerification = () => {
     setStep(steps.deposit_approval_pending);
     fetch("/api/approval-request", {
@@ -49,12 +65,10 @@ export default function Deposit() {
           .then((res) => res.json())
           .then((response) => {
             if (response.approved) {
-              setStep(steps.deposit_verified);
+              router.push(`/share?ref=${router.query.ref}`)
             }
           });
       }, 3000);
-    } else if (step === steps.deposit_verified) {
-      setTimeout(() => router.push(`/share?ref=${router.query.ref}`, 1000));
     }
 
     return () => clearInterval(interval);
@@ -65,7 +79,7 @@ export default function Deposit() {
   //   "83642124",
   //   "no",
   //   5,
-  //   "GoodWill Pte Ltd",
+  //   "GiftACoffee Pte Ltd",
   //   router.query.ref
   // );
   // console.log("[DEBUG] payNowString",payNowString)
@@ -73,38 +87,35 @@ export default function Deposit() {
   let queryString = encodeURI(
     `mobile=83642124&uen=&editable=0&amount=5&expiry=${getExpiry()}&ref_id=${
       router.query.ref
-    } (GoodWill Pte Ltd)&company=`
+    } GiftACoffee Pte Ltd&company=`
   );
 
   return (
     <div>
       <Head>
-        <title>Buy you a coffee ☕️</title>
+        <title>Gift a coffee ☕️</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>Buy you a coffee</h1>
+      <main className="max-w-80 mx-auto mt-10 text-[#591F0B]">
         <p>
-          Please deposit SGD 5 into the deposit account. Kindly include the
-          unique identifier{" "}
-          <span className="font-bold">{router.query.ref}</span> under the
-          reference area.
+          Kindly deposit your coffee credit to generate a unique redeemable
+          link.
         </p>
         <p>
-          You can scan the QR code on screen to access deposit account (GoodWill
-          Pte Ltd).
+          Your unique reference number is{" "}
+          <span className="font-bold">{router.query.ref}</span>.
         </p>
-        <img src={`https://sgqrcode.com/paynow?${queryString}`} />
+        <img className="w-60 m-auto my-4" src={`https://sgqrcode.com/paynow?${queryString}`} />
 
         {step === steps.deposit_verified && (
           <Badge className="bg-green-600">Success</Badge>
         )}
         {step === steps.deposit && (
-          <Button onClick={triggerDepositVerification}>Deposit complete</Button>
+          <Button className="w-full rounded-full p-8 bg-[#2D0C05] text-[#E8C5A5]" onClick={triggerDepositVerification}>Generate link</Button>
         )}
         {step === steps.deposit_approval_pending && (
-          <p>Pending approval... Please give it a few minutes</p>
+          <p className="text-sm font-light text-center mt-8">Verifying deposit... It may takes up to 1 minutes, please do not close this window.</p>
         )}
       </main>
     </div>

@@ -46,7 +46,7 @@ bot.on("message", (msg) => {
       case "Approve":
         db.run(
           `UPDATE goodwill SET approved = 1 WHERE ref='${ref}'`
-        );
+        )
         bot.sendMessage(chatId, `Approved ${ref}`);
         break;
       case "Reject":

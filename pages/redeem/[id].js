@@ -5,15 +5,15 @@ import { Input } from "@/components/ui/input";
 import { getById } from "../api/goodwill";
 
 const steps = {
-  default: "default",
   code: "code",
   codeInvalid: "codeInvalid",
+  default: "default",
   phone: "phone",
   success: "success",
 };
 
 export default function Redeem({ data }) {
-  const [step, setStep] = useState(steps.default);
+  const [step, setStep] = useState(steps.code);
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
 
@@ -67,57 +67,92 @@ export default function Redeem({ data }) {
   return (
     <div>
       <Head>
-        <title>Buy you a coffee ☕️</title>
+        <title>Gift a coffee ☕️</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>
-          {data.name} would like to{" "}
+      <main className="max-w-80 mx-auto mt-10 text-[#591F0B]">
+        <div className="text-center mb-10">
+          <p className="font-bold">{data.sender_name}</p>
+          has{" "}
           {data.appreciation === "buy-you-a-coffee" && (
-            <span>“Buy you a coffee”</span>
+            <span>bought you a cup of coffee!</span>
           )}
-        </h1>
-
-        <p>{data.message}</p>
+        </div>
 
         {step === steps.default && (
-          <Button onClick={initiateRedemption}>Redeem</Button>
+          <Button onClick={initiateRedemption}>Redeem your coffee</Button>
         )}
 
-        {step === steps.code && (
-          <div>
-            <p>Kindly provide the redemption code for verification</p>
+        {(step === steps.code || step === steps.codeInvalid) && (
+          <div className="space-y-2">
+            <p>Redemption code</p>
             <Input value={code} onChange={(e) => setCode(e.target.value)} />
-            <Button onClick={verifyCode}>Verify</Button>
-          </div>
-        )}
-        {step === steps.codeInvalid && (
-          <div>
-            <p>Kindly provide the redemption code for verification</p>
-            <p className="text-red-500">Invalid code, please try again.</p>
-            <Input value={code} onChange={(e) => setCode(e.target.value)} />
-            <Button onClick={verifyCode}>Verify</Button>
+            {step === steps.codeInvalid && (
+              <p className="text-red-500 text-xs">
+                Invalid code, please try again.
+              </p>
+            )}
+            <Button
+              className="w-full rounded-full p-8 bg-[#2D0C05] text-[#E8C5A5]"
+              onClick={verifyCode}
+            >
+              Redeem
+            </Button>
           </div>
         )}
         {step === steps.phone && (
-          <div>
-            <p>
-              Kindly provide your PayLah! phone number to complete the
-              redemption. The money will be transferred into your PayLah!
-              eWallet directly.
-            </p>
-            <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-            <Button onClick={initiateTransfer}>Redeem</Button>
+          <div className="h-min">
+            {data.message !== "" && (
+              <>
+                <div className="rounded-2xl bg-[#C6A989] mt-2 p-4 flex flex-col gap-4 shadow-lg text-wrap w-full relative">
+                  <p>{data.message}</p>
+                  <p className="text-xs italic">
+                    Written by {data.sender_name} on{" "}
+                    {new Date(data.created_at).toLocaleString()}
+                  </p>
+                </div>
+                <div className="space-y-4 text-sm mt-8">
+                  <p>
+                    Kindly provide your PayLah! mobile number to complete the
+                    redemption.
+                  </p>
+                  <p>
+                    The credit will be transferred into your PayLah! e-Wallet
+                    directly.
+                  </p>
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                  <Button
+                    className="w-full rounded-full p-8 bg-[#2D0C05] text-[#E8C5A5]"
+                    onClick={initiateTransfer}
+                  >
+                    Proceed
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         )}
         {step === steps.success && (
-          <p>
-            You have successfully redeems{" "}
-            <span className="font-bold">{data.name}</span>'s token of
-            appreciation! You should receive a transfer from{" "}
-            <span className="font-bold">GoodWill Pte Ltd</span> within 15 minutes.
-          </p>
+          <div className="space-y-2">
+            <p>
+              Congratulations!{" "}
+              <span className="font-bold">{data.receiver_name}</span>
+            </p>
+            <p>
+              You have successfully redeems{" "}
+              <span className="font-bold">{data.sender_name}</span>'s token of
+              appreciation! 🎉
+            </p>
+            <p>
+              You should receive a transfer from{" "}
+              <span className="font-bold">GiftACoffee Pte Ltd</span> within 15
+              minutes.
+            </p>
+          </div>
         )}
       </main>
     </div>

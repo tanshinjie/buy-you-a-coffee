@@ -22,7 +22,8 @@ db.serialize(() => {
   db.run(
     `CREATE TABLE IF NOT EXISTS goodwill (
             id INTEGER PRIMARY KEY,
-            name TEXT,
+            sender_name TEXT,
+            receiver_name TEXT,
             message TEXT,
             appreciation TEXT,
             ref TEXT,
@@ -52,6 +53,7 @@ db.serialize(() => {
         // Sample values for insertion
         const value1 = [
           "Alice",
+          "Bob",
           "You are amazing!",
           "buy-you-a-coffee",
           "001",
@@ -60,7 +62,8 @@ db.serialize(() => {
           date.setDate(date.getDate() + 1),
         ];
         const value2 = [
-          "Bob",
+          "Charlie",
+          "David",
           "You are awesome!",
           "buy-you-a-coffee",
           "002",
@@ -69,7 +72,8 @@ db.serialize(() => {
           date.setDate(date.getDate() + 1),
         ];
         const value3 = [
-          "Charlie",
+          "Elliot",
+          "Fitch",
           "You are wonderful!",
           "buy-you-a-coffee",
           "003",
@@ -79,30 +83,30 @@ db.serialize(() => {
         ];
 
         // SQL command for insertion
-        const insertSql = `INSERT INTO goodwill (name, message, appreciation, ref, code, redeemed, expires_at) VALUES (?,?,?,?,?,?,?)`;
+        const insertSql = `INSERT INTO goodwill (sender_name, receiver_name, message, appreciation, ref, code, redeemed, expires_at) VALUES (?,?,?,?,?,?,?,?)`;
 
         // Execute insert commands for each value
         db.run(insertSql, value1, (err) => {
           if (err) {
             return console.error(err.message);
           }
-          const id = this.lastID;
-          console.log(`Added goodwill item with id ${id}`);
+          
+          console.log(`Added goodwill item`);
         });
 
         db.run(insertSql, value2, (err) => {
           if (err) {
             return console.error(err.message);
           }
-          const id = this.lastID;
-          console.log(`Added goodwill item with id ${id}`);
+          
+          console.log(`Added goodwill item`);
         });
         db.run(insertSql, value3, (err) => {
           if (err) {
             return console.error(err.message);
           }
-          const id = this.lastID;
-          console.log(`Added goodwill item with id ${id}`);
+          
+          console.log(`Added goodwill item`);
         });
 
         // Close the database connection
